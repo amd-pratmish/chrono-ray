@@ -383,9 +383,8 @@ class ChRDoE:
 
     @staticmethod
     def _execute_trial(simulate_fn, config):
-        import os
-        #TODO ITEM #2 
-        os.environ["CUDA_VISIBLE_DEVICES"] = "0"
+        from ChronoRay.ChR_Cluster import setup_trial_gpu_env
+        setup_trial_gpu_env()
         simulate_fn(config)
 
 
@@ -447,12 +446,12 @@ class ChRDoE:
             sys.stdout = _TeeStream(log_file)
             sys.stderr = _TeeStream(log_file)
 
-        if not ray.is_initialized():
-            ray.init(
-                logging_level=logging.ERROR,
-                log_to_driver=False,
-                configure_logging=False
-            )
+        from ChronoRay.ChR_Cluster import init_ray, trial_runtime_env
+        init_ray(
+            logging_level=logging.ERROR,
+            log_to_driver=True,
+            configure_logging=False,
+        )
 
         self.FLAG_auto_run = True
 
@@ -460,11 +459,16 @@ class ChRDoE:
         remote_fn = ray.remote(max_calls=1)(ChRDoE._execute_trial).options(
             num_cpus=self.resources_per_trial["cpu"],
             num_gpus=self.resources_per_trial["gpu"],
+            runtime_env=trial_runtime_env(),
         )
 
         # fire off all trials in parallel — .remote() returns immediately with a future
         # Ray queues and runs them concurrently up to the available resource limit
         for i in range(0, len(self._configs), self.max_concurrent_trials):
             batch = self._configs[i:i + self.max_concurrent_trials]
+            batch_num = i // self.max_concurrent_trials + 1
+            total_batches = (len(self._configs) + self.max_concurrent_trials - 1) // self.max_concurrent_trials
+            print(f"Batch {batch_num}/{total_batches}: launching {len(batch)} trials...", flush=True)
             futures = [remote_fn.remote(self.simulate_fn, config) for config in batch]
-            ray.get(futures)
+            ray.get(futures, timeout=7200)
+            print(f"Batch {batch_num}/{total_batches}: done.", flush=True)

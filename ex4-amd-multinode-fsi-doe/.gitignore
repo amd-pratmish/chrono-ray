@@ -1,0 +1,7 @@
+logs/
+__pycache__/
+*.pyc
+**/particles/
+**/sph_particles/
+**/doe_run.log
+**/chr_doe_log_*.txt

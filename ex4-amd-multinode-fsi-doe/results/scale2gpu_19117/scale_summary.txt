@@ -1,0 +1,14 @@
+scale_tier=2
+scale_gpus=2
+cluster_gpus=2.0
+nodes=1
+trials_requested=4
+trials_completed_dirs=4
+max_concurrent=2
+sim_tend=0.5
+elapsed_seconds=573
+exit_code=0
+job_id=19117
+partition=rad
+nodelist=rad-vultr-mi355x-01
+ray_address=10.2.96.3:6379

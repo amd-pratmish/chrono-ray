@@ -6,3 +6,5 @@
 */movie/ 
 */movie-*/
 */*.png
+.venv/
+ChronoRay.egg-info/

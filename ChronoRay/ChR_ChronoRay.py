@@ -224,6 +224,8 @@ class ChR_ChronoRay:
         RETURNS:    None
         THROWS:     TypeError if objective_fn does not return a scalar float
         """
+        from ChronoRay.ChR_Cluster import setup_trial_gpu_env
+        setup_trial_gpu_env()
         raw_output = self.simulate_fn(config)
         value      = self.objective_fn(raw_output)
 
@@ -283,12 +285,12 @@ class ChR_ChronoRay:
             sys.stdout = _TeeStream(log_file)
             sys.stderr = _TeeStream(log_file)
 
-        if not ray.is_initialized():
-            ray.init(
-                logging_level=logging.ERROR,
-                log_to_driver=False,
-                configure_logging=False
-            )
+        from ChronoRay.ChR_Cluster import init_ray
+        init_ray(
+            logging_level=logging.ERROR,
+            log_to_driver=False,
+            configure_logging=False,
+        )
 
         built_search_alg = self._build_search_alg()
 

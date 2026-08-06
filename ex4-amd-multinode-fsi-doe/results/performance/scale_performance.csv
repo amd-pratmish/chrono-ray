@@ -1,0 +1,13 @@
+run_dir,job_id,status,scale_gpus,cluster_gpus,nodes,partition,trials_requested,trials_completed,max_concurrent,sim_tend_s,wall_clock_min,doe_elapsed_min,avg_sec_per_trial,throughput_trials_per_hr,gpu_hours,trials_per_gpu_hour,speedup_vs_1gpu,parallel_efficiency_pct,batches_completed,nodelist
+scale1gpu_19114,19114,PASS,1,1.0,,,2,2,0,,,7.9,236.2,15.2,0.13,15.24,1.00,100.0,2,
+scale2gpu_19117,19117,PASS,2,2.0,1,rad,4,4,2,0.5,9.6,9.5,142.5,25.3,0.32,12.63,1.66,82.9,2,rad-vultr-mi355x-01
+scale8gpu_19120,19120,PASS,8,8.0,1,rad,16,16,8,1.0,42.6,42.5,159.2,22.6,5.66,2.83,1.48,18.5,2,rad-vultr-mi355x-03
+scale16gpu_19203,19203,PASS,16,16.0,2,rad,32,32,16,1.0,43.0,42.9,80.4,44.8,11.43,2.80,2.94,18.4,2,rad-vultr-mi355x-[02-03]
+scale16gpu_19070,19070,FAIL,16,16.0,,,32,0,0,,,,,,0.00,0.00,,,0,
+scale16gpu_19071,19071,FAIL,16,16.0,,,32,0,0,,,,,,0.00,0.00,,,0,
+scale16gpu_19072,19072,FAIL,16,16.0,,,32,0,0,,,,,,0.00,0.00,,,0,
+scale16gpu_19073,19073,FAIL,16,16.0,,,32,0,0,,,,,,0.00,0.00,,,0,
+scale16gpu_19074,19074,FAIL,16,16.0,,,32,0,0,,,,,,0.00,0.00,,,0,
+scale16gpu_19075,19075,FAIL,16,16.0,,,32,0,0,,,,,,0.00,0.00,,,0,
+scale16gpu_19201,19201,FAIL,16,16.0,,,32,0,0,,,,,,0.00,0.00,,,0,
+scale16gpu_19202,19202,FAIL,16,16.0,,,32,0,0,,,,,,0.00,0.00,,,0,
