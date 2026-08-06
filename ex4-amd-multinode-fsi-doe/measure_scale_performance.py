@@ -84,6 +84,11 @@ def collect_runs() -> list[dict]:
         if completed == 0 and doe.get("trial_done_log_lines"):
             completed = int(doe["trial_done_log_lines"])
 
+        particles_dir = run_dir / "particles"
+        if particles_dir.is_dir():
+            particle_dirs = sum(1 for p in particles_dir.iterdir() if p.is_dir())
+            completed = max(completed, particle_dirs)
+
         if requested == 0 and scale_gpus is not None:
             # Default trial counts from scale_profiles.sh when summary missing
             default_trials = {

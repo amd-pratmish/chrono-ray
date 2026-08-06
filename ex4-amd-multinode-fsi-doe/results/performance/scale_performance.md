@@ -6,6 +6,7 @@
 | 2 | 19117 | PASS | 4/4 | 9.5 | 142.5 | 25.3 | 0.32 | 12.63 | 1.66 | 82.9% |
 | 8 | 19120 | PASS | 16/16 | 42.5 | 159.2 | 22.6 | 5.66 | 2.83 | 1.48 | 18.5% |
 | 16 | 19203 | PASS | 32/32 | 42.9 | 80.4 | 44.8 | 11.43 | 2.80 | 2.94 | 18.4% |
+| 32 | 19270 | PARTIAL | 32/64 |  |  |  | 0.00 | 0.00 |  | % |
 
 ## All runs (including partial/failed)
 
@@ -21,3 +22,5 @@
 - **scale16gpu_19075** [FAIL]: 0/32 trials, DoE  min, throughput  trials/hr, partition=?
 - **scale16gpu_19201** [FAIL]: 0/32 trials, DoE  min, throughput  trials/hr, partition=?
 - **scale16gpu_19202** [FAIL]: 0/32 trials, DoE  min, throughput  trials/hr, partition=?
+- **scale32gpu_19254** [FAIL]: 0/64 trials, DoE  min, throughput  trials/hr, partition=?
+- **scale32gpu_19270** [PARTIAL]: 32/64 trials, DoE  min, throughput  trials/hr, partition=?
