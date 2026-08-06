@@ -122,6 +122,10 @@ def trial_runtime_env() -> dict:
     out_dir = os.environ.get("CHR_RAY_OUTPUT_DIR")
     if out_dir:
         env_vars["CHR_RAY_OUTPUT_DIR"] = out_dir
+    for key in ("CHR_RAY_SIM_TEND", "CHR_RAY_OUTPUT_FPS", "CHR_RAY_SAVE_PARTICLES"):
+        val = os.environ.get(key)
+        if val is not None:
+            env_vars[key] = val
     return {"env_vars": env_vars}
 
 

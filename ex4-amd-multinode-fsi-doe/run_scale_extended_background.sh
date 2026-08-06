@@ -10,13 +10,9 @@ exec > >(tee -a "${LOG}") 2>&1
 LADDER=(16 32 64 72 96 128)
 
 wait_job() {
-  local JOB="$1"
-  [[ -z "${JOB}" ]] && return 1
-  echo "Waiting for job ${JOB}..."
-  while squeue -j "${JOB}" -h 2>/dev/null | grep -q "${JOB}"; do
-    sleep 60
-  done
-  sleep 10
+  # shellcheck source=slurm_wait.sh
+  source "${EX4}/slurm_wait.sh"
+  wait_for_slurm_job "$1" 600 45
 }
 
 tier_already_passed() {
@@ -127,6 +123,5 @@ for SCALE in "${LADDER[@]}"; do
   fi
 done
 
-echo ""
 echo "=== Ladder finished $(date) — ${FAILED} tier(s) failed ==="
-bash "${EX4}/measure_scale_performance.py" || true
+bash /home/pratmish/chrono-ray/scripts/persist_experiment_status.sh || true

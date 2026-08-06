@@ -47,7 +47,9 @@ ray_wait_for_gpus() {
       found=$(grep -oP '^\s+\d+\.\d+/\K[\d.]+(?=\s+GPU)' /tmp/ray_status_$$.txt | tail -1 || echo "0")
       found=${found%.*}
       if [[ -n "${found}" && "${found}" -ge "${TARGET_GPUS}" ]]; then
-        cp /tmp/ray_status_$$.txt "${4:-/tmp/ray_status_$$.txt}"
+        if [[ -n "${4:-}" ]]; then
+          cp /tmp/ray_status_$$.txt "${4}"
+        fi
         rm -f /tmp/ray_status_$$.txt
         echo "${found}"
         return 0

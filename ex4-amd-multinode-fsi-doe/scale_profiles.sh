@@ -64,6 +64,8 @@ apply_scale_profile() {
       export CHR_RAY_NUM_TRIALS=64
       export CHR_RAY_MAX_CONCURRENT=32
       export CHR_RAY_SIM_TEND=1.0
+      export CHR_RAY_OUTPUT_FPS=0
+      export CHR_RAY_SAVE_PARTICLES=0
       export CHR_RAY_PARTITION=rad-burst
       export CHR_RAY_QOS=low
       export CHR_RAY_TIME=08:00:00

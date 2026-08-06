@@ -8,7 +8,15 @@ import pychrono as chrono
 import pychrono.fsi as fsi
 
 TIME_STEP = 2e-5
-OUTPUT_FPS = 100
+DEFAULT_OUTPUT_FPS = 100.0
+
+
+def _output_fps() -> float:
+    return float(os.environ.get("CHR_RAY_OUTPUT_FPS", str(DEFAULT_OUTPUT_FPS)))
+
+
+def _save_particles_enabled() -> bool:
+    return os.environ.get("CHR_RAY_SAVE_PARTICLES", "1") != "0"
 
 
 def _make_run_dir(config):
@@ -144,12 +152,18 @@ def simulate_fn(config):
     sim_time = 0.0
     dt = sys_fsi.GetStepSizeCFD()
     out_frame = 0
+    output_fps = _output_fps()
+    save_end_only = output_fps <= 0
+    save_particles = _save_particles_enabled()
 
     while sim_time < t_end:
-        if sim_time >= out_frame / OUTPUT_FPS:
+        if save_particles and not save_end_only and sim_time >= out_frame / output_fps:
             sys_sph.SaveParticleData(sph_dir)
             out_frame += 1
         sys_fsi.DoStepDynamics(dt)
         sim_time += dt
+
+    if save_particles and (save_end_only or out_frame == 0):
+        sys_sph.SaveParticleData(sph_dir)
 
     print(f"[trial done] {run_dir}", flush=True)

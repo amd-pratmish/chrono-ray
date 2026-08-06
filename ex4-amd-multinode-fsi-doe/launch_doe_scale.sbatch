@@ -136,7 +136,7 @@ else
 
   export RAY_ADDRESS="${RAY_ADDR}"
   echo "Waiting for ${CHR_RAY_TOTAL_GPUS} GPUs to register (timeout ${CHR_RAY_GPU_WAIT_SEC}s)..."
-  CLUSTER_GPUS=$(ray_wait_for_gpus "${RAY_ADDR}" "${CHR_RAY_TOTAL_GPUS}" "${CHR_RAY_GPU_WAIT_SEC}" || true)
+  CLUSTER_GPUS=$(ray_wait_for_gpus "${RAY_ADDR}" "${CHR_RAY_TOTAL_GPUS}" "${CHR_RAY_GPU_WAIT_SEC}" "${LOG_DIR}/ray_status_${SLURM_JOB_ID}.txt" || true)
   if [[ -z "${CLUSTER_GPUS}" || "${CLUSTER_GPUS}" -lt "${CHR_RAY_TOTAL_GPUS}" ]]; then
     echo "WARN: only ${CLUSTER_GPUS:-0}/${CHR_RAY_TOTAL_GPUS} GPUs registered; continuing with available GPUs"
     RAY_ADDRESS="${RAY_ADDR}" ray status | tee "${LOG_DIR}/ray_status_${SLURM_JOB_ID}.txt" || true
@@ -168,6 +168,8 @@ export CHR_RAY_SCALE="${SCALE}"
 export CHR_RAY_NUM_TRIALS="${CHR_RAY_NUM_TRIALS}"
 export CHR_RAY_MAX_CONCURRENT="${CHR_RAY_MAX_CONCURRENT}"
 export CHR_RAY_SIM_TEND="${CHR_RAY_SIM_TEND}"
+export CHR_RAY_OUTPUT_FPS="${CHR_RAY_OUTPUT_FPS:-100}"
+export CHR_RAY_SAVE_PARTICLES="${CHR_RAY_SAVE_PARTICLES:-1}"
 START_TS=$(date +%s)
 echo "Starting DoE at $(date) in ${RUN_DIR}"
 

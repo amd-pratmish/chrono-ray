@@ -470,5 +470,9 @@ class ChRDoE:
             total_batches = (len(self._configs) + self.max_concurrent_trials - 1) // self.max_concurrent_trials
             print(f"Batch {batch_num}/{total_batches}: launching {len(batch)} trials...", flush=True)
             futures = [remote_fn.remote(self.simulate_fn, config) for config in batch]
-            ray.get(futures, timeout=7200)
+            try:
+                ray.get(futures, timeout=7200)
+            except Exception as exc:
+                print(f"Batch {batch_num} ray.get failed: {exc}", flush=True)
+                raise
             print(f"Batch {batch_num}/{total_batches}: done.", flush=True)
