@@ -72,6 +72,7 @@ run_tier() {
     wait_job "${JOB}"
     if check_pass "${JOB}" "${SCALE}"; then
       echo "PASS tier ${SCALE} job ${JOB}"
+      bash /home/pratmish/chrono-ray/scripts/persist_experiment_status.sh || true
       return 0
     fi
   fi
@@ -100,6 +101,7 @@ run_tier() {
     wait_job "${JOB}"
     if check_pass "${JOB}" "${SCALE}"; then
       echo "PASS tier ${SCALE} job ${JOB}"
+      bash /home/pratmish/chrono-ray/scripts/persist_experiment_status.sh || true
       return 0
     fi
 
