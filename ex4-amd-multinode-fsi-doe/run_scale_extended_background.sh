@@ -7,7 +7,7 @@ EX4="/home/pratmish/chrono-ray/ex4-amd-multinode-fsi-doe"
 LOG="${EX4}/logs/scale_extended_$(date +%Y%m%d_%H%M%S).log"
 exec > >(tee -a "${LOG}") 2>&1
 
-LADDER=(16 32 64 72 96 128)
+LADDER=(16 24 32 64 72 96 128)
 
 wait_job() {
   # shellcheck source=slurm_wait.sh

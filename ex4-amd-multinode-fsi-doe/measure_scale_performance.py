@@ -227,16 +227,33 @@ def write_markdown(rows: list[dict], path: Path) -> None:
     lines = [
         "# ChronoRay FSI-SPH Scale Performance",
         "",
-        "| GPUs | Job | Status | Trials | DoE (min) | Avg trial (s) | Throughput (trials/hr) | GPU-hrs | Trials/GPU-hr | Speedup | Par. eff. |",
-        "|------|-----|--------|--------|-----------|---------------|------------------------|---------|---------------|---------|-----------|",
+        "Throughput and per-trial latency for PASS runs (`sim_tend=1.0`, FSI angle-of-repose DoE).",
+        "",
+        "| GPUs | Job | Trials | DoE (min) | Avg sec/trial | Throughput (trials/hr) | Partition |",
+        "|------|-----|--------|-----------|---------------|------------------------|-----------|",
     ]
     for r in rows:
-        if r["status"] == "FAIL" and not r["trials_completed"]:
+        if r["status"] != "PASS":
             continue
         lines.append(
-            f"| {r['scale_gpus']} | {r['job_id']} | {r['status']} | "
+            f"| {r['scale_gpus']} | {r['job_id']} | "
             f"{r['trials_completed']}/{r['trials_requested']} | {r['doe_elapsed_min']} | "
-            f"{r['avg_sec_per_trial']} | {r['throughput_trials_per_hr']} | {r['gpu_hours']} | "
+            f"{r['avg_sec_per_trial']} | {r['throughput_trials_per_hr']} | {r['partition'] or '?'} |"
+        )
+    lines.extend([
+        "",
+        "Avg sec/trial ≈ 3600 / throughput when the cluster is fully utilized.",
+        "",
+        "## Extended metrics (PASS runs)",
+        "",
+        "| GPUs | Job | GPU-hrs | Trials/GPU-hr | Speedup vs 1 GPU | Parallel eff. |",
+        "|------|-----|---------|---------------|------------------|---------------|",
+    ])
+    for r in rows:
+        if r["status"] != "PASS":
+            continue
+        lines.append(
+            f"| {r['scale_gpus']} | {r['job_id']} | {r['gpu_hours']} | "
             f"{r['trials_per_gpu_hour']} | {r['speedup_vs_1gpu']} | {r['parallel_efficiency_pct']}% |"
         )
     lines.extend(["", "## All runs (including partial/failed)", ""])
@@ -244,7 +261,8 @@ def write_markdown(rows: list[dict], path: Path) -> None:
         lines.append(
             f"- **{r['run_dir']}** [{r['status']}]: "
             f"{r['trials_completed']}/{r['trials_requested']} trials, "
-            f"DoE {r['doe_elapsed_min']} min, throughput {r['throughput_trials_per_hr']} trials/hr, "
+            f"DoE {r['doe_elapsed_min']} min, avg {r['avg_sec_per_trial']} s/trial, "
+            f"throughput {r['throughput_trials_per_hr']} trials/hr, "
             f"partition={r['partition'] or '?'}"
         )
     path.write_text("\n".join(lines) + "\n")
