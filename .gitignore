@@ -8,3 +8,6 @@
 */*.png
 .venv/
 ChronoRay.egg-info/
+ex5-synchrono-ray-coupled/logs/
+ex5-synchrono-ray-coupled/results/coupled*
+ex5-synchrono-ray-coupled/results/coupledmg*

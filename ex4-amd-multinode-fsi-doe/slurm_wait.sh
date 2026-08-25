@@ -4,6 +4,7 @@ wait_for_slurm_job() {
   local JOB="$1"
   local APPEAR_WAIT="${2:-600}"
   local POLL="${3:-45}"
+  local MAX_RUNTIME="${4:-0}"
 
   [[ -z "${JOB}" ]] && return 1
 
@@ -23,9 +24,17 @@ wait_for_slurm_job() {
     fi
   done
 
-  echo "Job ${JOB} is active — polling until complete..."
+  echo "Job ${JOB} is active — polling until complete${MAX_RUNTIME:+ (max ${MAX_RUNTIME}s)}..."
+  waited=0
   while squeue -j "${JOB}" -h 2>/dev/null | grep -q "${JOB}"; do
+    if [[ "${MAX_RUNTIME}" -gt 0 && "${waited}" -ge "${MAX_RUNTIME}" ]]; then
+      echo "Job ${JOB} exceeded max runtime ${MAX_RUNTIME}s — cancelling (likely stuck)"
+      scancel "${JOB}" 2>/dev/null || true
+      sleep 15
+      return 1
+    fi
     sleep "${POLL}"
+    waited=$((waited + POLL))
   done
   sleep 10
   return 0

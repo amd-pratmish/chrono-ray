@@ -471,7 +471,8 @@ class ChRDoE:
             print(f"Batch {batch_num}/{total_batches}: launching {len(batch)} trials...", flush=True)
             futures = [remote_fn.remote(self.simulate_fn, config) for config in batch]
             try:
-                ray.get(futures, timeout=7200)
+                get_timeout = float(os.environ.get("CHR_RAY_GET_TIMEOUT", "14400"))
+                ray.get(futures, timeout=get_timeout)
             except Exception as exc:
                 print(f"Batch {batch_num} ray.get failed: {exc}", flush=True)
                 raise

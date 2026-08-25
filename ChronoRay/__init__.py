@@ -5,3 +5,9 @@ from ChronoRay.ChRBayesOpt import ChRBayesOpt
 from ChronoRay.ChRDoE import ChRDoE
 from ChronoRay.ChROpt import ChROpt
 from ChronoRay.ChR_Cluster import init_ray, setup_trial_gpu_env, recommended_resources, detect_gpu_backend, trial_runtime_env
+from ChronoRay.ChR_MpiCoupled import (
+    run_mpi_coupled_trial,
+    make_mpi_simulate_fn,
+    recommended_resources_coupled,
+    config_to_cli_args,
+)
